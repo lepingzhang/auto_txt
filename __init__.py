@@ -1,3 +1,3 @@
-from .auo_txt import AutoTxt
+from .auto_txt import AutoTxt
 
 __all__ = ["AutoTxt"]
