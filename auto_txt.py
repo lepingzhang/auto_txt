@@ -1,6 +1,7 @@
 import os
 import subprocess
 from plugins import register, Plugin, Event, Reply, ReplyType, logger
+import re
 
 @register
 class AutoTxt(Plugin):
@@ -8,9 +9,6 @@ class AutoTxt(Plugin):
 
     def __init__(self, config: dict):
         super().__init__(config)
-
-    def help(self, **kwargs):
-        return '自动文本处理插件：根据文件名处理文本并保存结果'
 
     @property
     def commands(self):
@@ -41,30 +39,30 @@ class AutoTxt(Plugin):
                 return
 
     def process_file(self, event: Event, filename: str) -> Reply:
-        # 直接从配置中读取路径和脚本名
         input_file_path = os.path.join(self.config['script_path'], f'{filename}.txt')
         output_dir_path = self.config['script_path']
         script_name = self.config['script_name']
+        script_path = os.path.join(self.config['script_path'], script_name)
 
         if not os.path.exists(input_file_path):
             return Reply(ReplyType.TEXT, '未找到该文件，请确认名称是否正确')
 
         try:
             result = subprocess.run(
-                ['python', script_name, input_file_path, output_dir_path],
+                ['python', script_path, input_file_path, output_dir_path],
                 capture_output=True,
                 text=True
             )
 
             if result.returncode == 0:
-                logger.info('文本处理成功: %s', result.stdout)
-                return Reply(ReplyType.TEXT, '文件处理成功，请前往查看')
+                return Reply(ReplyType.TEXT, '文件处理成功，请刷新原路径')
             else:
-                logger.error('文本处理失败: %s', result.stderr)
                 return Reply(ReplyType.TEXT, '文件处理失败')
         except Exception as exc:
-            logger.error('处理脚本执行出错: %s', exc)
             return Reply(ReplyType.TEXT, '处理脚本执行出错')
+
+    def help(self, **kwargs):
+        return '自动文本处理插件：根据文件名处理文本并保存结果'
 
     def will_decorate_reply(self, event: Event):
         pass
