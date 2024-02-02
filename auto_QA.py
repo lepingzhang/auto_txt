@@ -14,14 +14,7 @@ def process_text_for_jinshuju(text):
     processed_text = processed_text.lstrip('\n')
     return processed_text
 
-def main():
-    if len(sys.argv) < 3:
-        print("Usage: python out_template.py <input_file> <output_dir>")
-        sys.exit(1)
-
-    input_file_path = sys.argv[1]
-    output_dir_path = sys.argv[2]
-
+def process_file(input_file_path, output_dir_path):
     original_filename = os.path.splitext(os.path.basename(input_file_path))[0]
     current_date = datetime.now().strftime('%Y-%m-%d')
 
@@ -39,6 +32,26 @@ def main():
 
     with open(os.path.join(output_dir_path, f'{original_filename}_jinshuju.txt'), 'w', encoding='utf-8') as file:
         file.write(processed_text_jinshuju)
+
+def main():
+    if len(sys.argv) < 3:
+        print("Usage: python auto_QA.py <input_file> <output_dir>")
+        sys.exit(1)
+
+    input_arg = sys.argv[1]
+    output_dir_path = sys.argv[2]
+
+    if input_arg.lower() == '全部':
+        for filename in os.listdir(output_dir_path):
+            if filename.endswith('.txt') and not filename.startswith('.') and not filename.endswith('_xiaoe.txt') and not filename.endswith('_jinshuju.txt'):
+                input_file_path = os.path.join(output_dir_path, filename)
+                process_file(input_file_path, output_dir_path)
+    else:
+        input_file_path = os.path.join(output_dir_path, f'{input_arg}.txt')
+        if os.path.exists(input_file_path):
+            process_file(input_file_path, output_dir_path)
+        else:
+            print(f"文件未找到，请检查名称是否正确")
 
 if __name__ == "__main__":
     main()
