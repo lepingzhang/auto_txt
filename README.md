@@ -25,10 +25,7 @@
   {
     "name": "script_hub",
     "commands": {
-      "整理题库：": {
-        "script": "auto_QA.py",
-        "path": "C:\\Users\\name\\Downloads"
-      }
+      "整理题库：": "auto_QA.py"
     }
   }
 ]
