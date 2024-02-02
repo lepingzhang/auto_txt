@@ -20,23 +20,20 @@ class ScriptHub(Plugin):
         if is_group:
             query = re.sub(r'@[\w]+\s+', '', query, count=1).strip()
 
-        for cmd, config in self.commands.items():
+        for cmd, script_name in self.commands.items():
             if query.startswith(cmd.lower()):
                 filename = query.split(cmd, 1)[1].strip()
 
-                script_name = config.get('script')
-                output_path = config.get('path', self.config.get('out_path', '.'))
-
-                event.reply = self.process_script(event, filename, script_name, output_path)
+                event.reply = self.process_script(event, filename, script_name)
                 event.bypass()
                 return
 
-    def process_script(self, event: Event, filename: str, script_name: str, output_path: str) -> Reply:
+    def process_script(self, event: Event, filename: str, script_name: str) -> Reply:
         script_path = os.path.join(os.path.dirname(__file__), script_name)
 
         try:
             result = subprocess.run(
-                ['python', script_path, filename, output_path],
+                ['python', script_path, filename],
                 capture_output=True,
                 text=True
             )
