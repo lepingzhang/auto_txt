@@ -34,12 +34,12 @@ def process_file(input_file_path, output_dir_path):
         file.write(processed_text_jinshuju)
 
 def main():
-    if len(sys.argv) < 3:
-        print("Usage: python auto_QA.py <input_file> <output_dir>")
+    if len(sys.argv) < 2:
+        print("Usage: python auto_QA.py <input_file>")
         sys.exit(1)
 
     input_arg = sys.argv[1]
-    output_dir_path = sys.argv[2]
+    output_dir_path = "your_patch"
 
     if input_arg.lower() == '全部':
         for filename in os.listdir(output_dir_path):
