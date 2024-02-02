@@ -1,3 +1,3 @@
-from .auto_txt import AutoTxt
+from .script_hub import ScriptHub
 
-__all__ = ["AutoTxt"]
+__all__ = ["ScriptHub"]
