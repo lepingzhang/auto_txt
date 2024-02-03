@@ -39,7 +39,7 @@ def main():
         sys.exit(1)
 
     input_arg = sys.argv[1]
-    output_dir_path = "your_patch"
+    output_dir_path = "C:\\Users\\recker\\Downloads"
 
     if input_arg.lower() == '全部':
         for filename in os.listdir(output_dir_path):
