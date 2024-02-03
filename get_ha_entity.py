@@ -42,21 +42,19 @@ def get_summary():
             total_space = used_space = remaining_space = "未知"
         
         market_power_statuses = {
-            '排插': boss_plug_status,
-            '电脑': deng_pc_status,
-            '充电': drone_charge_status
+            '老板排插': boss_plug_status,
+            '工作电脑': deng_pc_status,
+            '航拍充电': drone_charge_status
         }
-        if all(status == '未知' for status in market_power_statuses.values()):
-            market_description = '所有电源状态未知'
-        else:
-            market_description = ', '.join([f'{device}插头{status}' if status != '未知' else f'{device}电源状态未知' for device, status in market_power_statuses.items()])
-        
-        if training_charge_status == '未知' and (training_plug_statistics == '未知' or training_plug_statistics == 0):
-            training_description = '所有电源状态未知'
-        else:
-            training_charge_description = f'训练充电插头{training_charge_status}' if training_charge_status != '未知' else '训练充电插头状态未知'
-            training_plug_description = f'排插{training_plug_statistics}个打开' if isinstance(training_plug_statistics, int) and training_plug_statistics > 0 else '排插状态未知'
-            training_description = f'{training_charge_description}, {training_plug_description}'
+        market_on_devices = [device for device, status in market_power_statuses.items() if status == 'on']
+        market_off_devices = [device for device, status in market_power_statuses.items() if status == 'off']
+        market_description = ', '.join([f'{device}插头开启' for device in market_on_devices])
+        if market_off_devices:
+            market_description += '，其余关闭' if market_on_devices else '所有插头关闭'
+
+        training_charge_description = '训练充电插头' + ('开启' if training_charge_status == 'on' else '关闭')
+        training_plug_description = f'排插{training_plug_statistics}个开启' if isinstance(training_plug_statistics, int) and training_plug_statistics > 0 else '排插全部关闭'
+        training_description = f'{training_charge_description}, {training_plug_description}'
         
         summary = (
             f"今天是{current_date}，公司概况如下：\n\n"
@@ -70,12 +68,13 @@ def get_summary():
             
             "网络核心：\n"
             f"- 路由器：{router_devices if router_devices != '未知' else '在线设备数未知'}个在线设备\n"
-            f"- 云服务：{'剩余空间未知' if remaining_space == '未知' else f'剩余空间为{remaining_space:.2f}TB'}\n"
+            f"- 云服务：{'剩余空间未知' if remaining_space == '未知' else f'剩余空间为{remaining_space:.2f} TB'}\n"
             f"- 服务器：{server_status if server_status != '未知' else '虚拟机数未知'}个虚拟机运行中"
         )
         return summary
 
     except Exception as e:
+        logger.error(f"生成公司概况信息时发生错误：{str(e)}")
         return "生成公司概况信息时发生错误，请检查日志了解详细信息。"
 
 print(get_summary())
