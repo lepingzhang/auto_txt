@@ -72,7 +72,12 @@ class ScriptHub(Plugin):
             query = re.sub(r'@[\w]+\s+', '', query, count=1).strip()
 
         for cmd, handler in self.handlers.items():
-            if query.startswith(cmd):
+            if cmd.endswith('：') and query.startswith(cmd):
+                args = handler.parse_command(query)
+                event.reply = handler.run(event, args)
+                event.bypass()
+                return
+            elif not cmd.endswith('：') and re.match(f"^{cmd}( |$)", query):
                 args = handler.parse_command(query)
                 event.reply = handler.run(event, args)
                 event.bypass()
