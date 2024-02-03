@@ -63,7 +63,7 @@ def get_summary():
             f"- 市场部：{market_description}\n"
             f"- 培训部：{training_description}\n\n"
             
-            "监控系统：\n"
+            "安防系统：\n"
             f"- 摄像头：{camera_info if camera_info != '未知' else '未获取到画面信息'}\n\n"
             
             "网络核心：\n"
