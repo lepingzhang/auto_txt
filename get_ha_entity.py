@@ -69,8 +69,9 @@ def get_summary():
             "网络核心：\n"
             f"- 路由器：{router_devices if router_devices != '未知' else '在线设备数未知'}个在线设备\n"
             f"- 云服务：{'剩余空间未知' if remaining_space == '未知' else f'剩余空间为{remaining_space:.2f} TB'}\n"
-            f"- 服务器：{server_status if server_status != '未知' else '虚拟机数未知'}个虚拟机运行中"
+            f"- 服务器：{server_status if server_status != '未知' else '虚拟机数未知'}个虚拟机运行中\n\n"
         )
+        summary += "更多详细信息请登录中枢查看"
         return summary
 
     except Exception as e:
